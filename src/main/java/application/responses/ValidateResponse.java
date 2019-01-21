@@ -1,32 +1,47 @@
 package application.responses;
 
+/**
+ * 
+ * @author ecom-anandraj.t
+ *
+ */
+
 public class ValidateResponse {
 	
-	String responseId;
-	public String getResponseId() {
-		return responseId;
+	public boolean isValidatedResult() {
+		return validatedResult;
 	}
 
-	public void setResponseId(String responseId) {
-		this.responseId = responseId;
+
+	public void setValidatedResult(boolean validatedResult) {
+		this.validatedResult = validatedResult;
 	}
 
-	public String getResponseData() {
-		return responseData;
+
+	public String getValidatedMessage() {
+		return validatedMessage;
 	}
 
-	public void setResponseData(String responseData) {
-		this.responseData = responseData;
+
+	public void setValidatedMessage(String validatedMessage) {
+		this.validatedMessage = validatedMessage;
 	}
 
-	String responseData;
+
+	private boolean validatedResult;
+	private String validatedMessage;
+	private final String SUCCESS_MESSAGE = "Request is valid";
+
 	
-	public ValidateResponse() {
+	public ValidateResponse(boolean validatedResult, String validatedMessage) {
 		// TODO Auto-generated constructor stub
 		
-		this.responseId="1";
-		this.responseData="I am gary bear";
-		
+		if(validatedMessage==null) {
+			this.validatedMessage = SUCCESS_MESSAGE;
+		} else {
+			this.validatedMessage = validatedMessage;
+		}
+		this.validatedResult = validatedResult;		
 		
 	}
 

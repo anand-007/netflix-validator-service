@@ -5,6 +5,12 @@ import org.springframework.stereotype.Service;
 import application.dao.MemberDAO;
 import application.models.Member;
 
+/**
+ * 
+ * @author ecom-anandraj.t
+ *
+ */
+
 @Service
 public class MemberService {
 	
@@ -17,6 +23,8 @@ public class MemberService {
 	Member findMemberById(String id){
 		
 		Member member = null;
+		
+		member = this.dao.findMemberById(id);
 		
 		return member;
 	}

@@ -1,15 +1,29 @@
 package application.evaluator;
 import java.util.List;
 
-import application.models.Device;
 import application.models.IValidateModel;
 import application.requests.IModelRequest;
+import application.responses.EvaluationResponse;
 import application.specifications.ISpecification;
+
+/**
+ * Performing validation for Device Rules
+ * @author ecom-anandraj.t
+ *
+ */
 
 public class DeviceSpecificationEvaluator implements IEvaluator {
 	
-	List<ISpecification<IValidateModel, IModelRequest>> deviceSpecifications;
+	List<ISpecification> deviceSpecifications;
 	
+	public List<ISpecification> getDeviceSpecifications() {
+		return deviceSpecifications;
+	}
+
+	public void setDeviceSpecifications(List<ISpecification> deviceSpecifications) {
+		this.deviceSpecifications = deviceSpecifications;
+	}
+
 	IValidateModel device;
 	
 	IModelRequest deviceRequest;
@@ -20,16 +34,21 @@ public class DeviceSpecificationEvaluator implements IEvaluator {
 	}
 	
 	@Override
-	public boolean evaluateSpecifications() {
+	public EvaluationResponse evaluateSpecifications() {
 		// TODO Auto-generated method stub
 		
 		boolean evaluatedResult = true;
-		
+		EvaluationResponse evaluatedResponse = null;
+
 		for(ISpecification<IValidateModel, IModelRequest> specification: deviceSpecifications) {
-			evaluatedResult = evaluatedResult & specification.isSatisfiedBy(this.device, this.deviceRequest);
+			evaluatedResponse = specification.isSatisfiedBy(this.device, this.deviceRequest);
+			evaluatedResult = evaluatedResult & evaluatedResponse!=null && evaluatedResponse.isSuccess();
+			if(!evaluatedResult) {
+				break;
+			}
 		}
 		
-		return evaluatedResult;
+		return evaluatedResponse;
 	}
 
 }

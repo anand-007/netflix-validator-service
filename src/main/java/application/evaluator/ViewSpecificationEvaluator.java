@@ -4,11 +4,26 @@ import java.util.List;
 
 import application.models.IValidateModel;
 import application.requests.IModelRequest;
+import application.responses.EvaluationResponse;
 import application.specifications.ISpecification;
+
+/**
+ * Performing validation for View Rules
+ * @author ecom-anandraj.t
+ *
+ */
 
 public class ViewSpecificationEvaluator implements IEvaluator {
 
-	List<ISpecification<IValidateModel, IModelRequest>> viewSpecifications;
+	public List<ISpecification> getViewSpecifications() {
+		return viewSpecifications;
+	}
+
+	public void setViewSpecifications(List<ISpecification> viewSpecifications) {
+		this.viewSpecifications = viewSpecifications;
+	}
+
+	List<ISpecification> viewSpecifications;
 	
 	IValidateModel view;
 	IModelRequest viewRequest;
@@ -19,14 +34,19 @@ public class ViewSpecificationEvaluator implements IEvaluator {
 	}
 
 	@Override
-	public boolean evaluateSpecifications() {
+	public EvaluationResponse evaluateSpecifications() {
 		boolean evaluatedResult = true;
-		
+		EvaluationResponse evaluatedResponse = null;
+
 		for(ISpecification<IValidateModel, IModelRequest> specification: viewSpecifications) {
-			evaluatedResult = evaluatedResult & specification.isSatisfiedBy(this.view, this.viewRequest);
+			evaluatedResponse = specification.isSatisfiedBy(this.view, this.viewRequest);
+			evaluatedResult = evaluatedResult & evaluatedResponse!=null && evaluatedResponse.isSuccess();
+			if(!evaluatedResult) {
+				break;
+			}
 		}
 		
-		return evaluatedResult;
+		return evaluatedResponse;
 	}
 
 }

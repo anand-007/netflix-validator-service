@@ -1,5 +1,11 @@
 package application.models;
 
+/**
+ * Address Model of the user
+ * @author ecom-anandraj.t
+ *
+ */
+
 public class Address {
 	
 	String addressLine1;

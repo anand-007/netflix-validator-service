@@ -1,13 +1,16 @@
 package application.services;
 
 import org.springframework.stereotype.Service;
-
 import application.dao.ViewableDAO;
-import application.models.Device;
 import application.models.Viewable;
 
-@Service
+/**
+ * 
+ * @author ecom-anandraj.t
+ *
+ */
 
+@Service
 public class ViewService {
 	
 	ViewableDAO dao;
@@ -19,6 +22,8 @@ public class ViewService {
 	Viewable findViewById(String id){
 		
 		Viewable view = null;
+		
+		view = this.dao.findViewById(id);
 		
 		return view;
 	}

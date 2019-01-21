@@ -10,27 +10,42 @@ import application.requests.DeviceRequest;
 import application.requests.IModelRequest;
 import application.requests.MemberRequest;
 import application.requests.ViewableRequest;
+import application.specifications.ISpecification;
+import application.specifications.SpecificationFactory;
+
+/**
+ * Factory 
+ * @author ecom-anandraj.t
+ *
+ */
 
 public class EvaluatorFactory {
 	
 	public static IEvaluator getEvaluator(String evaluatorType, List<IValidateModel> modelList, List<IModelRequest> requestList) {
 		
+		List<ISpecification> specificationList = SpecificationFactory.getSpecifications(evaluatorType);
+
 		if(evaluatorType=="member") {
 			IValidateModel memberModel = getModel(modelList, evaluatorType);
 			IModelRequest request = getRequest(requestList, evaluatorType);
-			return new MemberSpecificationEvaluator(memberModel,request);
+			MemberSpecificationEvaluator memberEvaluator = new MemberSpecificationEvaluator(memberModel,request);
+			memberEvaluator.setMemberSpecifications(specificationList);
+			return memberEvaluator;
 		} else if(evaluatorType=="device") {
 			IValidateModel deviceModel = getModel(modelList, evaluatorType);
 			IModelRequest request = getRequest(requestList, evaluatorType);
-			return new DeviceSpecificationEvaluator(deviceModel,request);
+			DeviceSpecificationEvaluator deviceEvaluator = new DeviceSpecificationEvaluator(deviceModel,request);
+			deviceEvaluator.setDeviceSpecifications(specificationList);
+			return deviceEvaluator;
 		} else if(evaluatorType=="view") {
 			IValidateModel viewModel = getModel(modelList, evaluatorType);
 			IModelRequest request = getRequest(requestList, evaluatorType);
-			return new ViewSpecificationEvaluator(viewModel,request);
+			ViewSpecificationEvaluator viewEvaluator = new ViewSpecificationEvaluator(viewModel,request);
+			viewEvaluator.setViewSpecifications(specificationList);
+			return viewEvaluator;
 		} else {
 			return null;
-		}
-		
+		}	
 	}
 	
 	private static IValidateModel getModel(List<IValidateModel> modelList, String memberType) {
@@ -42,7 +57,7 @@ public class EvaluatorFactory {
 				validatedModel = model;
 			}else if(model instanceof Device && memberType=="device") {
 				validatedModel = model;
-			}else if(model instanceof Viewable && memberType=="device") {
+			}else if(model instanceof Viewable && memberType=="view") {
 				validatedModel = model;
 			}
 		}
@@ -61,7 +76,7 @@ public class EvaluatorFactory {
 				validatedRequest = request;
 			}else if(request instanceof DeviceRequest && memberType=="device") {
 				validatedRequest = request;
-			}else if(request instanceof ViewableRequest && memberType=="device") {
+			}else if(request instanceof ViewableRequest && memberType=="view") {
 				validatedRequest = request;
 			}
 		}
