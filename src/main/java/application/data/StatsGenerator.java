@@ -57,12 +57,14 @@ public class StatsGenerator {
 	}
 	
 	public void updateStatsCount(boolean success) {
-		if(success) {
-			validationSucceeded++;
-		} else {
-			validationFailed++;
+		synchronized (StatsGenerator.class) {
+			if(success) {
+				validationSucceeded++;
+			} else {
+				validationFailed++;
+			}
+			totalValidations++;
 		}
-		totalValidations++;
 	}
 
 }
